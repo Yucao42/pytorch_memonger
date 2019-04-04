@@ -17,16 +17,16 @@ import models.baseline.resnet as resnet_baseline
 class TestMemoryBaseline(unittest.TestCase):
 
     def test_resnet_baseline(self):
-        N = 4
+        N = 20
         total_iters = 5    # (warmup + benchmark)
         iterations = 4
 
-        target = Variable(torch.randn(N).fill_(1)).type("torch.LongTensor")
+        target = Variable(torch.randn(N//5).fill_(1)).type("torch.LongTensor")
         x = Variable(torch.randn(N, 3, 224, 224).fill_(1.0), requires_grad=True)
         # x = Variable(torch.randn(N, 3, 32, 32).fill_(1.0), requires_grad=True)
         # model = resnet_baseline.resnet200()
         # model = resnet_baseline.resnet101()
-        model = resnet_baseline.resnet50()
+        model = resnet_baseline.load_resnet()
         # model = resnet_baseline.resnet1001()
 
         # switch the model to train mode

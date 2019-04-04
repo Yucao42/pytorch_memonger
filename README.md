@@ -35,6 +35,14 @@ There are few special kinds of layers like Batch normalization, dropout that sho
 be handled carefully. The details for handling those are also available in the
 tutorial
 
+## Test result
+
+|    |Mem |Batchsize|
+|----|----|---------|
+|base|2.6G|   20    |
+|chp |1.6G|   20    |
+
+
 ## References
 
 [1]. Siskind, Jeffrey Mark, and Barak A. Pearlmutter. "Divide-and-Conquer Checkpointing for Arbitrary Programs with No User Annotation." arXiv preprint arXiv:1708.06799 (2017).
