@@ -22,7 +22,7 @@ class TestMemoryOptimized(unittest.TestCase):
         iterations = 1
         chunks = 6
 
-        target = torch.ones(N).type("torch.LongTensor")
+        target = torch.ones(int(N//5)).type("torch.LongTensor")
         x = torch.ones(N, 3, 224, 224, requires_grad=True)
         # x = torch.ones(N, 3, 32, 32, requires_grad=True)
         # model = resnet_optim.resnet200()
