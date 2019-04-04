@@ -11,6 +11,7 @@ import unittest, time, sys
 import models.baseline.word_language_model as wlm_baseline
 import models.baseline.densenet as densenet_baseline
 import models.baseline.resnet as resnet_baseline
+from datetime import datetime as dt
 #import models.baseline.vnet as vnet_baseline
 
 
@@ -18,7 +19,7 @@ class TestMemoryBaseline(unittest.TestCase):
 
     def test_resnet_baseline(self):
         N = 20
-        total_iters = 5    # (warmup + benchmark)
+        total_iters = 20    # (warmup + benchmark)
         iterations = 4
 
         target = Variable(torch.randn(N//5).fill_(1)).type("torch.LongTensor")
@@ -69,4 +70,6 @@ class TestMemoryBaseline(unittest.TestCase):
             m.bias.data.zero_()
 
 if __name__ == '__main__':
+    s = dt.now()
     unittest.main()
+    print('Time spent: {:.2f} s'.format((dt.now() -s).total_seconds()))

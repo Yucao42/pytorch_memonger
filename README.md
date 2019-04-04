@@ -37,10 +37,10 @@ tutorial
 
 ## Test result
 
-|    |Mem |Batchsize|
-|----|----|---------|
-|base|2.6G|   20    |
-|chp |1.6G|   20    |
+|    |Mem |Batchsize|Time |
+|----|----|---------|-----|
+|base|2.6G|   20    |38.9s|
+|chp |1.6G|   20    |38.9s|
 
 
 ## References
