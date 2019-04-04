@@ -37,12 +37,14 @@ tutorial
 
 ## Test result
 
-|    |Mem |Batchsize|Time |
+|    |GPU Mem |Batchsize|Training Time (20 iters) |
 |----|----|---------|-----|
 |base|2.6G|   4    |38.9s|
 |checkpointed |1.8G|   4    |18.9s/38.9s|
 |base|5.6G + 4.1G|   16    |66.5s|
 |checkpointed |5.1G + 5.1G|   32    |67.5s|
+|base|5.5G + 5.7G|   20    |84.5s|
+|checkpointed |6.0G + 5.7G|   36    |74.5s|
 
 
 ## References

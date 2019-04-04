@@ -5,6 +5,7 @@ import torch.backends.cudnn as cudnn
 
 import torch.nn.functional as F
 from torch.autograd import Variable
+from torch.nn import DataParallel
 
 import unittest, time, sys
 
@@ -18,7 +19,7 @@ from datetime import datetime as dt
 class TestMemoryBaseline(unittest.TestCase):
 
     def test_resnet_baseline(self):
-        N = 80
+        N = 100
         total_iters = 20    # (warmup + benchmark)
         iterations = 4
 
@@ -28,6 +29,7 @@ class TestMemoryBaseline(unittest.TestCase):
         # model = resnet_baseline.resnet200()
         # model = resnet_baseline.resnet101()
         model = resnet_baseline.load_resnet()
+        model = DataParallel(model)
         # model = resnet_baseline.resnet1001()
 
         # switch the model to train mode

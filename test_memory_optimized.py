@@ -17,7 +17,7 @@ import models.optimized.resnet_new as resnet_optim
 class TestMemoryOptimized(unittest.TestCase):
 
     def test_resnet_optim(self):
-        N = 160
+        N = 180
         # N = 51
         total_iters = 20    # (warmup + benchmark)
         iterations = 1
