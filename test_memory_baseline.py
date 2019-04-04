@@ -22,12 +22,12 @@ class TestMemoryBaseline(unittest.TestCase):
         iterations = 4
 
         target = Variable(torch.randn(N).fill_(1)).type("torch.LongTensor")
-        # x = Variable(torch.randn(N, 3, 224, 224).fill_(1.0), requires_grad=True)
-        x = Variable(torch.randn(N, 3, 32, 32).fill_(1.0), requires_grad=True)
+        x = Variable(torch.randn(N, 3, 224, 224).fill_(1.0), requires_grad=True)
+        # x = Variable(torch.randn(N, 3, 32, 32).fill_(1.0), requires_grad=True)
         # model = resnet_baseline.resnet200()
         # model = resnet_baseline.resnet101()
-        # model = resnet_baseline.resnet50()
-        model = resnet_baseline.resnet1001()
+        model = resnet_baseline.resnet50()
+        # model = resnet_baseline.resnet1001()
 
         # switch the model to train mode
         model.train()
