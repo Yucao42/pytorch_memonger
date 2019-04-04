@@ -3,9 +3,18 @@ import math
 import pdb, time, sys
 from collections import OrderedDict
 from torch.utils.checkpoint import checkpoint, checkpoint_sequential
+import torch.utils.model_zoo as model_zoo
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnet200', 'resnet1001']
+
+model_urls = {
+    'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
+    'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
+    'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
+    'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
+    'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
+}
 
 def resnet18(pretrained=False, **kwargs):
     model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
@@ -16,7 +25,7 @@ def resnet34(pretrained=False, **kwargs):
     return model
 
 def resnet50(pretrained=False, **kwargs):
-    model = PreActResNet(PreActBottleneck, [3, 4, 6, 3], **kwargs)
+    model = PreActResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
     return model
 
 def resnet101(pretrained=False, **kwargs):
@@ -154,7 +163,7 @@ class PreActBottleneck(nn.Module):
 
 class PreActResNet(nn.Module):
 
-    def __init__(self, block, layers, num_classes=10):
+    def __init__(self, block, layers, dropout=0.5, num_classes=4):
         self.inplanes = 64
         super(PreActResNet, self).__init__()
 
@@ -186,18 +195,27 @@ class PreActResNet(nn.Module):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
             downsample = nn.Sequential(
-                nn.BatchNorm2d(self.inplanes),
                 nn.Conv2d(self.inplanes, planes * block.expansion,
                           kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(planes * block.expansion),
             )
 
+        #ayers = []
+        #ayers.append(
+        #   block(self.inplanes, planes, stride, downsample))
+        #elf.inplanes = planes * block.expansion
+        #or i in range(1, blocks):
+        #   layers.append(
+        #       block(self.inplanes, planes))
+        #elf.features.add_module('layer%d' % stage, nn.Sequential(*layers))
+
         self.features.add_module(
-            'PreActBottleneck_%d_%d' % (stage, 0),
+            'layer%d__%d' % (stage, 0),
             block(self.inplanes, planes, stride, downsample))
         self.inplanes = planes * block.expansion
         for i in range(1, blocks):
             self.features.add_module(
-                'PreActBottleneck_%d_%d' % (stage, i),
+                'layer%d__%d' % (stage, i),
                 block(self.inplanes, planes))
 
     def forward(self, input_var, chunks=3):
@@ -208,3 +226,37 @@ class PreActResNet(nn.Module):
         input_var = input_var.view(input_var.size(0)//5, 5, -1).mean(1)
         input_var = self.fc(input_var)
         return input_var
+
+def load_resnet(resnet_type='50', pretrained=False, dropout=0.0, **kwargs):
+    if resnet_type == '18':
+        block = BasicBlock
+        layers = [2, 2, 2, 2]
+    elif resnet_type == '34':
+        block = BasicBlock
+        layers = [3, 4, 6, 3]
+    elif resnet_type == '50':
+        block = Bottleneck
+        layers = [3, 4, 6, 3]
+    elif resnet_type == '101':
+        block = Bottleneck
+        layers = [3, 4, 23, 3]
+    elif resnet_type == '152':
+        block = Bottleneck
+        layers = [3, 8, 36, 3]
+
+    model = PreActResNet(block, layers, dropout=dropout, **kwargs)
+    if pretrained:
+        state_dict = model_zoo.load_url(model_urls['resnet%s' % resnet_type])
+        model_dict = list(model.modules())[1].state_dict()
+        for k, v in model_dict.items():
+            k_ = k.replace('__', '.')
+            if k_ in state_dict.keys():
+                v = state_dict[k_].data
+                try:
+                    model_dict[k].copy_(v)
+                except:
+                    print(k, k_, model_dict[k].shape, v.shape)
+        #state_dict = {k.replace('__', '.'): v for k, v in state_dict.items() if k in model_dict}
+        #model_dict.update(state_dict)
+        #model.load_state_dict(model_dict)
+    return model
