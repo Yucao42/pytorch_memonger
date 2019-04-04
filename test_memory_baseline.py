@@ -18,7 +18,7 @@ from datetime import datetime as dt
 class TestMemoryBaseline(unittest.TestCase):
 
     def test_resnet_baseline(self):
-        N = 20
+        N = 80
         total_iters = 20    # (warmup + benchmark)
         iterations = 4
 

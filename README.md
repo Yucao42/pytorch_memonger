@@ -39,8 +39,10 @@ tutorial
 
 |    |Mem |Batchsize|Time |
 |----|----|---------|-----|
-|base|2.6G|   20    |38.9s|
-|chp |1.6G|   20    |38.9s|
+|base|2.6G|   4    |38.9s|
+|chp |1.8G|   4    |18.9s/38.9s|
+|base|5.6G + 4.1G|   16    |66.5s|
+|chp |5.1G + 5.1G|   32    |67.5s|
 
 
 ## References

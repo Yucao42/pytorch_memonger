@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.backends.cudnn as cudnn
 
 import torch.nn.functional as F
+from torch.nn import DataParallel
 from torch.autograd import Variable
 
 import unittest, time, sys
@@ -16,7 +17,7 @@ import models.optimized.resnet_new as resnet_optim
 class TestMemoryOptimized(unittest.TestCase):
 
     def test_resnet_optim(self):
-        N = 20
+        N = 160
         # N = 51
         total_iters = 20    # (warmup + benchmark)
         iterations = 1
@@ -28,6 +29,7 @@ class TestMemoryOptimized(unittest.TestCase):
         # model = resnet_optim.resnet200()
         # model = resnet_optim.resnet101()
         model = resnet_optim.resnet50()
+        model = DataParallel(model)
         # model = resnet_optim.resnet1001()
 
         # switch the model to train mode
