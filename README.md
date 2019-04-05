@@ -45,6 +45,8 @@ tutorial
 |checkpointed |5.1G + 5.1G|   32    |67.5s|
 |base|5.5G + 5.7G|   20    |84.5s|
 |checkpointed |6.0G + 5.7G|   36    |74.5s|
+|base TSN Resnet50|3.9G|   4    |0.41s|
+|checkpointed TSN Resnet50|4.5G|   32    |1.4s|
 
 
 ## References
